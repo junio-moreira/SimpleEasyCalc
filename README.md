@@ -20,5 +20,5 @@ This application provides a practical and intuitive way to perform calculations,
 ```kotlin
 fun main() {
     println("Code by Júnio Moreira!")
-    println("Welcome to the Password Generator!")
+    println("Welcome to the Simple Easy Calculator!")
 }
