@@ -2,7 +2,7 @@
 
 ## Project 🎯 
 
-This application provides a practical and intuitive way to perform calculations, allowing users to enter mathematical expressions and obtain results quickly and efficiently.
+Exercise 04: This application provides a practical and intuitive way to perform calculations, allowing users to enter mathematical expressions and obtain results quickly and efficiently.
 
 ## Layout 🎨 
 
