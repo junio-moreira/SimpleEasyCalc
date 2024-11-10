@@ -1,0 +1,203 @@
+
+package br.com.moreira.simpleeasycalc
+
+import android.os.Build
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import java.util.Locale
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var inputField: EditText
+    private var currentExpression = ""
+    private var op1: Double? = null
+    private var pendingOp: String = "="
+    private var isNewOp = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Configurar a cor da barra de status para coincidir com a cor do aplicativo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+        }
+
+        inputField = findViewById(R.id.result)
+
+        // Definir os botões de números
+        val button0: Button = findViewById(R.id.button0)
+        val button1: Button = findViewById(R.id.button1)
+        val button2: Button = findViewById(R.id.button2)
+        val button3: Button = findViewById(R.id.button3)
+        val button4: Button = findViewById(R.id.button4)
+        val button5: Button = findViewById(R.id.button5)
+        val button6: Button = findViewById(R.id.button6)
+        val button7: Button = findViewById(R.id.button7)
+        val button8: Button = findViewById(R.id.button8)
+        val button9: Button = findViewById(R.id.button9)
+        val buttonDot: Button = findViewById(R.id.buttonDot)
+
+        // Definir os botões de operações
+        val buttonAdd: Button = findViewById(R.id.buttonAdd)
+        val buttonSubtract: Button = findViewById(R.id.buttonSubtract)
+        val buttonMultiply: Button = findViewById(R.id.buttonMultiply)
+        val buttonDivide: Button = findViewById(R.id.buttonDivide)
+        val buttonEqual: Button = findViewById(R.id.buttonEqual)
+
+        // Definir os botões de limpar e backspace
+        val buttonClear: Button = findViewById(R.id.buttonClear)
+        val backSpace: ImageButton = findViewById(R.id.backSpace)
+
+        // Botão de alternar o sinal
+        val buttonToggleSign: Button = findViewById(R.id.buttonBracket)
+
+        // Botão de porcentagem
+        val buttonPercentage: Button = findViewById(R.id.buttonPercentage)
+
+        // Configurar os ouvintes de clique para os botões numéricos
+        val numberButtons = listOf(button0, button1, button2, button3, button4, button5, button6, button7, button8, button9)
+        numberButtons.forEach { button ->
+            button.setOnClickListener {
+                appendToExpression(button.text.toString())
+            }
+        }
+
+        // Ouvintes para operações
+        buttonAdd.setOnClickListener { setPendingOperation("+", buttonAdd) }
+        buttonSubtract.setOnClickListener { setPendingOperation("-", buttonSubtract) }
+        buttonMultiply.setOnClickListener { setPendingOperation("*", buttonMultiply) }
+        buttonDivide.setOnClickListener { setPendingOperation("/", buttonDivide) }
+
+        // Ouvintes para limpar e calcular
+        buttonClear.setOnClickListener { clear() }
+        buttonEqual.setOnClickListener { calculateResult() }
+
+        // Ouvinte para o botão de backspace
+        backSpace.setOnClickListener {
+            if (currentExpression.isNotEmpty()) {
+                currentExpression = currentExpression.dropLast(1)
+                inputField.setText(currentExpression)
+            }
+        }
+
+        // Ouvinte para o ponto decimal
+        buttonDot.setOnClickListener { appendToExpression(".") }
+
+        // Ouvinte para o botão de alternar o sinal (±)
+        buttonToggleSign.setOnClickListener {
+            toggleSign()
+        }
+
+        // Ouvinte para o botão de porcentagem
+        buttonPercentage.setOnClickListener {
+            calculatePercentage()
+        }
+    }
+
+    private fun appendToExpression(value: String) {
+        if (isNewOp) {
+            currentExpression = ""
+            isNewOp = false
+        }
+        currentExpression += value
+        inputField.setText(currentExpression)
+    }
+
+    private fun setPendingOperation(op: String, button: Button) {
+        if (op1 == null) {
+            op1 = currentExpression.toDoubleOrNull()
+        } else {
+            // Agora o cálculo será feito apenas quando "=" for pressionado
+            calculateResult()
+        }
+        pendingOp = op
+        isNewOp = true
+
+        // Alterar a cor do botão de operação pressionado
+        resetOperationButtonColor()
+        button.setTextColor(getColor(R.color.black)) // Mudar cor do texto para preto
+    }
+
+    private fun calculateResult() {
+        // Aqui é onde o cálculo real é feito
+        try {
+            val value = currentExpression.toDoubleOrNull()
+            if (value != null && op1 != null) {
+                val result = when (pendingOp) {
+                    "+" -> op1!! + value
+                    "-" -> op1!! - value
+                    "*" -> op1!! * value
+                    "/" -> if (value == 0.0) throw UnsupportedOperationException("Cannot divide by zero") else op1!! / value
+                    else -> value
+                }
+
+                // Verificar se o resultado é um número inteiro ou decimal
+                if (result == result.toInt().toDouble()) {
+                    // Se o resultado é inteiro, mostrar como inteiro
+                    inputField.setText(String.format(Locale.getDefault(), "%d", result.toInt()))
+                    currentExpression = result.toInt().toString()
+                } else {
+                    // Se for decimal, mostrar como double
+                    inputField.setText(String.format(Locale.getDefault(), "%.2f", result))
+                    currentExpression = result.toString()
+                }
+
+                isNewOp = true
+                op1 = result
+
+                // Resetar a cor dos botões de operação para branco
+                resetOperationButtonColor() // Adicionando a chamada para restaurar a cor dos botões
+            }
+        } catch (e: Exception) {
+            inputField.setText("Error")
+            resetOperationButtonColor() // Também resetando as cores em caso de erro
+        }
+    }
+
+    private fun clear() {
+        currentExpression = ""
+        op1 = null
+        pendingOp = "="
+        inputField.setText("")
+        resetOperationButtonColor()
+        isNewOp = true
+    }
+
+    private fun calculatePercentage() {
+        try {
+            val value = currentExpression.toDoubleOrNull()
+            if (value != null) {
+                val percentage = value / 100
+                inputField.setText(String.format(Locale.getDefault(), "%.2f", percentage))
+                currentExpression = percentage.toString()
+            }
+        } catch (e: Exception) {
+            inputField.setText("Error")
+        }
+    }
+
+    private fun toggleSign() {
+        if (currentExpression.isNotEmpty()) {
+            val currentValue = currentExpression.toDoubleOrNull()
+            if (currentValue != null) {
+                currentExpression = (-currentValue).toString()
+                inputField.setText(currentExpression)
+            }
+        }
+    }
+
+    private fun resetOperationButtonColor() {
+        val operationButtons = listOf(
+            findViewById<Button>(R.id.buttonAdd), findViewById<Button>(R.id.buttonSubtract),
+            findViewById<Button>(R.id.buttonMultiply), findViewById<Button>(R.id.buttonDivide)
+        )
+        // Resetar a cor do texto dos botões de operação para branco
+        operationButtons.forEach { button ->
+            button.setTextColor(getColor(R.color.white))
+        }
+    }
+}

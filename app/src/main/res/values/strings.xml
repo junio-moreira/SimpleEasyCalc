@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">SimpleEasyCalc</string>
+
+    <!-- Numbers -->
+    <string name="zero" translatable="false">0</string>
+    <string name="one" translatable="false">1</string>
+    <string name="two" translatable="false">2</string>
+    <string name="three" translatable="false">3</string>
+    <string name="four" translatable="false">4</string>
+    <string name="five" translatable="false">5</string>
+    <string name="six" translatable="false">6</string>
+    <string name="seven" translatable="false">7</string>
+    <string name="eight" translatable="false">8</string>
+    <string name="nine" translatable="false">9</string>
+
+    <!-- Symbols -->
+    <string name="clear" translatable="false">C</string>
+    <string name="bracket" translatable="false">⇐</string>
+    <string name="percentage" translatable="false">%</string>
+    <string name="divide" translatable="false">÷</string>
+    <string name="multiply" translatable="false">×</string>
+    <string name="subtract" translatable="false">−</string>
+    <string name="add" translatable="false">+</string>
+    <string name="dot" translatable="false">.</string>
+    <string name="plusMinus" translatable="false">+/-</string>
+    <string name="equal" translatable="false">=</string>
+
+
+</resources>

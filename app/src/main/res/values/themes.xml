@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SimpleEasyCalc" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#009688</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+<!--        <item name="buttonStyle">@null</item> &lt;!&ndash; Desativa o estilo padrão para botões &ndash;&gt;-->
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">#E9EFFB</item>
+        <!-- Customize your theme here. -->
+
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+<!--    <style name="CalculatorButton">-->
+<!--        <item name="android:background">@drawable/background_numbers</item>-->
+<!--        <item name="android:textColor">@color/black</item>-->
+<!--        <item name="android:textSize">24sp</item>-->
+<!--        <item name="android:backgroundTint">@null</item> &lt;!&ndash; Remove o backgroundTint &ndash;&gt;-->
+<!--    </style>-->
+
+    <style name="Theme.SimpleEasyCalc" parent="Base.Theme.SimpleEasyCalc" />
+</resources>
